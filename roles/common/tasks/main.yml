@@ -1,0 +1,23 @@
+---
+
+- name: Include packages vars
+  include_vars:
+    file: packages.yml
+
+- name: Install dev packages
+  package:
+    name: "{{ packages.dev }}"
+    state: present
+
+- name: Install shell packages
+  package:
+    name: "{{ packages.shell }}"
+    state: present
+
+- name: install pacman config
+  copy:
+    src: pacman.conf
+    dest: /etc/pacman.conf
+    mode: 0644
+    owner: root
+    group: root

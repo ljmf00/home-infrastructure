@@ -1,0 +1,9 @@
+---
+
+packages:
+  dev:
+    - devtools
+    - pacman-contrib
+  shell:
+    - zsh
+    - bash
