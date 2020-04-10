@@ -1,0 +1,8 @@
+---
+
+- name: Restart Samba services
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: restarted
+  with_items: "{{ samba_services }}"
