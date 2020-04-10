@@ -1,0 +1,15 @@
+---
+
+user_groups:
+  - user
+  - admin
+  - smbuser
+
+users:
+  luis:
+    name: 'Luís Ferreira'
+    ssh_key: luis.pub
+    shell: /usr/bin/zsh
+    groups:
+      - user
+      - admin

@@ -1,0 +1,28 @@
+---
+
+user_groups:
+  - user
+  - admin
+  - smbuser
+
+users:
+  alex:
+    name: 'Alexandre Ferreira'
+    ssh_key: alex.pub
+    shell: /usr/bin/zsh
+    groups:
+      - user
+      - admin
+  luis:
+    name: 'Luís Ferreira'
+    ssh_key: luis.pub
+    shell: /usr/bin/zsh
+    groups:
+      - user
+      - admin
+
+  cornucopia:
+    name: 'Cornucopiazul .Lda'
+    shell: /sbin/nologin
+    groups:
+      - smbuser
