@@ -1,0 +1,10 @@
+---
+
+- name: save iptables
+  iptables:
+    state: save
+    backup: true
+  notify: reload iptables
+- name: reload iptables
+  iptables:
+    state: reload

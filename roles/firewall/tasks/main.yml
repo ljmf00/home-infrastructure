@@ -1,0 +1,35 @@
+---
+
+- name: Install 'ufw'
+  pacman: name=ufw state=present
+
+- name: Install 'ufw-extras'
+  pacman: name=ufw-extras state=present
+
+- name: Allow but limit ssh connections
+  ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+
+- name: Allow incoming IMCP packets from local network
+  iptables:
+    chain: INPUT
+    protocol: icmp
+    icmp_type: '8'
+    source: 192.168.1.0/24
+    ctstate: NEW,ESTABLISHED,RELATED
+    jump: ACCEPT
+  notify: save iptables
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+
+- name: Set deny default policy
+  ufw:
+    policy: deny
+
+- name: Set logging
+  ufw:
+    logging: 'on'
