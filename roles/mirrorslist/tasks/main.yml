@@ -1,0 +1,21 @@
+---
+
+- name: Check pacman-contrib
+  pacman:
+    name: pacman-contrib
+    state: installed
+
+- name: Download latest mirrorlist
+  shell: |
+    curl -s "https://www.archlinux.org/mirrorlist/?country=FR&country=GB&country=PT&country=ES&protocol=http&protocol=https&use_mirror_status=on" \
+      | sed -e 's/^#Server/Server/' -e '/^#/d' > /etc/pacman.d/mirrorlist
+
+
+- name: Move mirrorlist to unsorted file
+  copy:
+    src: /etc/pacman.d/mirrorlist
+    dest: /etc/pacman.d/mirrorlist.backup
+    remote_src: yes
+
+- name: Sort mirrors
+  shell: rankmirrors /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
