@@ -1,0 +1,4 @@
+---
+
+lighttpd_port: '80'
+lighttpd_path: /srv/http/lighttpd
