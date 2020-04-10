@@ -1,0 +1,11 @@
+---
+
+- name: update pacman mirrorslist
+  hosts:
+    - torns.lsferreira.net
+    - luna.lsferreira.net
+    - mars.lsferreira.net
+    - deimos.lsferreira.net
+
+  roles:
+    - mirrorslist
