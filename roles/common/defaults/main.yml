@@ -1,0 +1,11 @@
+---
+
+linux_package: linux
+
+install_group_packages:
+  official:
+  aur:
+
+install_host_packages:
+  official:
+  aur:

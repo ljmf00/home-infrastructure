@@ -2,8 +2,16 @@
 
 packages:
   dev:
+    - base
+    - base-devel
+    - git
     - devtools
     - pacman-contrib
   shell:
     - zsh
     - bash
+  linux:
+    - linux
+    - linux-zen
+    - linux-hardened
+    - linux-lts

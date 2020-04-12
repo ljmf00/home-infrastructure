@@ -21,3 +21,13 @@
     mode: 0644
     owner: root
     group: root
+
+- name: Install group packages
+  package:
+    name: "{{ install_group_packages.official }}"
+    state: present
+
+- name: Install host packages
+  package:
+    name: "{{ install_host_packages.official }}"
+    state: present
