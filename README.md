@@ -14,6 +14,13 @@ It's possible to use different linux versions like:
 Main network interface should have static IPv4 address to the specified on
 `hosts` file.
 
+### `mars` machine
+
+This machine should be installed with `linux-lts` due to **fucking** nvidia.
+
+This machine should have `mdadm` package and `md3` disks in software RAID
+pre-configured.
+
 ### `torns` machine
 
 This server should be installed with `linux-hardened`.
