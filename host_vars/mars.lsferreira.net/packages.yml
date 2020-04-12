@@ -1,0 +1,5 @@
+---
+
+install_host_packages:
+  official:
+  aur:

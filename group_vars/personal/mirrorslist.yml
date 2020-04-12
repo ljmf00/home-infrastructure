@@ -1,0 +1,4 @@
+---
+
+mirrorslist_additional_mirrors:
+  - http://192.168.1.2:8080/$repo/os/$arch
