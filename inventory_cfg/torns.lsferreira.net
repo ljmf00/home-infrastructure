@@ -1,0 +1,4 @@
+#run_prepare:
+run_playbook:setup-torns
+run_playbook:update-mirrorslist
+#run_docker:torns
