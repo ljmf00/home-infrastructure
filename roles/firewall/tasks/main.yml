@@ -20,7 +20,6 @@
     source: 192.168.1.0/24
     ctstate: NEW,ESTABLISHED,RELATED
     jump: ACCEPT
-  notify: save iptables
 
 - name: Enable UFW
   ufw:
