@@ -1,6 +1,28 @@
 # home-server
 Home Server ansible configuration
 
+## Usage
+
+Running ansible playbooks can be done either with `ansible-playbook` binary
+or using `configure` script:
+
+```bash
+./configure playbook setup-torns
+```
+
+This will run `playbooks/setup-torns.yml` ansible playbook.
+
+### Configure every host
+
+To configure every host properly, you can just run:
+
+```bash
+./configure
+```
+
+And it will run every playbook in order for you.
+
+
 ## Pre-configuration
 
 They should have `base`, `base-devel`, `linux`, `linux-headers`
