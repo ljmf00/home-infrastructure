@@ -113,6 +113,20 @@ function run_docker()
 	fi
 }
 
+# Configuration step runner
+# This function runs the specified step of the host configuration file
+# Usage: _run_host_cfg <host> <command> [args...]
+function _run_cfg_step()
+{
+	log $i "Running configuration step '$2 $3'"
+	local additional_args=()
+	if [ "$2" == "run_playbook" ]; then
+		additional_args+=("-l" "$1")
+	fi
+
+	$2 $3 ${additional_args[@]}
+}
+
 # Host configuration command runner
 # This function runs every specified command type found
 # Usage: _run_host_cfg <command>
@@ -131,14 +145,15 @@ function _run_host_cfg()
 	do
 		if [ -f "$_HS_CFG_INVENTORY_PATH$host" ]; then
 			((++num))
-			#[[ $a == z* ]]
+			log $i "Running configuration for host '$host'"
 			while read cfg_line; do
 				if [[ $# -eq 0 && $cfg_line != '#'* && $cfg_line != "" ]]; then
-					$(echo "$cfg_line" | cut -d: -f1) "$(echo "$cfg_line" | cut -d: -f2)"
+					_run_cfg_step "$host" $(echo "$cfg_line" | cut -d: -f1) "$(echo "$cfg_line" | cut -d: -f2)"
 				elif [[ $cfg_line == "$1:"* ]]; then
-					$1 "$(echo "$cfg_line" | cut -d: -f2)"
+					_run_cfg_step "$host" $1 "$(echo "$cfg_line" | cut -d: -f2)"
 				fi
 			done < "$_HS_CFG_INVENTORY_PATH$host"
+			log $i "Host '$host' configured."
 		else
 			log $w "No configuration found for host '$host'."
 		fi
@@ -197,6 +212,7 @@ case "${_args[1]}" in
 		_run_command docker
 		;;
 	all | '')
+		log $i "Running all commands from hosts configuration"
 		_run_host_cfg
 		;;
 	*)
@@ -204,3 +220,5 @@ case "${_args[1]}" in
 		print_help 1
 		;;
 esac
+
+log $i "Done."
