@@ -1,7 +1,11 @@
 ---
 
-- name: setup mars
-  hosts: mars.lsferreira.net
+- name: common setup playbook
+  hosts:
+    - luna.lsferreira.net
+    - mars.lsferreira.net
+    - torns.lsferreira.net
+    - deimos.lsferreira.net
   roles:
     - { role: common, tags: ['common'] }
     - { role: users, tags: ['users'] }

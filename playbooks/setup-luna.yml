@@ -3,8 +3,4 @@
 - name: setup luna
   hosts: luna.lsferreira.net
   roles:
-    - { role: common, tags: ['common'] }
-    - { role: users, tags: ['users'] }
-    - { role: ssh_root, tags: ['ssh_root'] }
-    - { role: sudo, tags: ['sudo'] }
-    - { role: firewall, tags: ['firewall'] }
+    - { role: named, tags: ['named'] }
