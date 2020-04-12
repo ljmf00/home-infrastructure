@@ -159,6 +159,8 @@ function _run_host_cfg()
 		fi
 	done
 	[ $num -eq 0 ] && fatal "No matching hosts found in '$_HS_CFG_INVENTORY_PATH'"
+
+	return 0;
 }
 
 # Run a command
