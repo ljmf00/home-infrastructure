@@ -1,5 +1,6 @@
 #run_prepare:
 
+run_playbook:setup-common
 run_playbook:setup-luna
 run_playbook:update-mirrorslist
 

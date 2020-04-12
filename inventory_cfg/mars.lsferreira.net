@@ -1,2 +1,3 @@
 #run_prepare:
-run_playbook:setup-mars
+run_playbook:setup-common
+run_playbook:update-mirrorslist
