@@ -6,9 +6,11 @@
     state: installed
 
 - name: Download latest mirrorlist
-  shell: |
-    curl -s "https://www.archlinux.org/mirrorlist/?country=FR&country=GB&country=PT&country=ES&protocol=http&protocol=https&use_mirror_status=on" \
-      | sed -e 's/^#Server/Server/' -e '/^#/d' > /etc/pacman.d/mirrorlist
+  shell:
+    cmd: |
+      curl -s "https://www.archlinux.org/mirrorlist/?country=FR&country=GB&country=PT&country=ES&protocol=http&protocol=https&use_mirror_status=on" \
+        | sed -e 's/^#Server/Server/' -e '/^#/d' > /etc/pacman.d/mirrorlist
+    warn: no
 
 
 - name: Move mirrorlist to unsorted file
@@ -19,3 +21,10 @@
 
 - name: Sort mirrors
   shell: rankmirrors /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
+
+- name: Add additional mirrors
+  shell:
+    cmd: sed -i '1iServer = {{ item }}' /etc/pacman.d/mirrorlist
+    warn: no
+  with_items: "{{ mirrorslist_additional_mirrors }}"
+  when: mirrorslist_additional_mirrors is defined
