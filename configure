@@ -1,0 +1,206 @@
+#!/usr/bin/env bash
+
+# bash settings
+set -e +o pipefail
+shopt -s extglob
+
+# Global variables
+_HS_PLAYBOOKS_PATH="playbooks/"
+_HS_CFG_INVENTORY_PATH="inventory_cfg/"
+_HS_DOCKER_PATH="docker/"
+
+# Log levels
+i="\033[0;36m" # info
+g="\033[0;32m" # green
+w="\033[0;33m" # warning
+e="\033[0;31m" # error
+l="\033[0;90m" # log test
+r="\033[0m" # reset
+
+# ======================= FUNCTION DECLARATIONS =======================
+
+# Logger
+# This function log messages
+# Usage: log <LEVEL> <MESSAGE>
+function log()
+{
+	echo -e " $1--> $l$2$r"
+}
+
+
+# Fatal logger
+# This function log fatal messages
+# Usage: fatal <MESSAGE> <EXIT_CODE>
+function fatal()
+{
+	log "$e" "$1"
+	exit "$([ $# -eq 2 ] && echo "$2" || echo 1)"
+}
+
+# Help printer
+# This function just prints the help message
+# Usage: print_help [EXIT_CODE]
+function print_help()
+{
+	echo "\
+usage ${_args[0]}: [-H hosts]
+                   command [args ...]
+
+commands list:
+	playbook(s) - will run the specified playbook\
+"
+	exit "$([ $# -eq 1 ] && echo "$1" || echo 0)"
+}
+
+# Arguments parser
+# This function parse arguments passed via command line
+# Usage: parse_args <script_path> [args...]
+# Note: This function is not pure
+function parse_args()
+{
+	options=$(getopt -o hH: --long help --long host: -- "$@")
+	[ $? -eq 0 ] || {
+		echo "Incorrect option provided"
+		exit 1
+	}
+	eval set -- "$options"
+	while true; do
+		case "$1" in
+		-h | --help)
+			_hs_help_wanted=1
+			;;
+		-H | --hosts)
+			shift
+			_hs_hosts="$1"
+			;;
+		--)
+			shift
+			_args+=($@)
+			break
+			;;
+		esac
+		shift
+	done
+}
+
+# Ansible playbooks runner
+# This function runs a specified ansible playbook
+# Usage: run_playbook <playbook>
+function run_playbook()
+{
+	local pb_file=("$_HS_PLAYBOOKS_PATH$1"+(.yml|.yaml))
+	if [ -f ${pb_file[0]} ]; then
+		ansible-playbook "${pb_file[0]}" ${@:2}
+	else
+		fatal "Playbook '$1' doesn't exist. Make sure it has a YAML extension."
+	fi
+}
+
+# Docker environment runner
+# This function runs a specified docker environment
+# Usage: run_docker <environment>
+function run_docker()
+{
+	local docker_folder="$_HS_DOCKER_PATH$1"
+	if [ -d "$docker_folder" ]; then
+		(
+			cd "$docker_folder"
+			source .env
+			DOCKER_HOST="ssh://$HS_DOCKER_USER@$HS_DOCKER_HOST" docker-compose up -d
+		)
+	else
+		fatal "Docker config '$1' doesn't exist. Make sure there's a folder with that name inside '$_HS_DOCKER_PATH'."
+	fi
+}
+
+# Host configuration command runner
+# This function runs every specified command type found
+# Usage: _run_host_cfg <command>
+# Note: This function is not pure
+function _run_host_cfg()
+{
+	local num=0
+	local pbs=()
+	local hosts_to_run=""
+	if [ -z ${_hs_hosts+x} ]; then
+		hosts_to_run="$(find "$_HS_CFG_INVENTORY_PATH" -type f -exec basename {} \; | sed "s/\n/ /g")"
+	else
+		hosts_to_run="$(echo $_hs_hosts | sed "s/,/ /g")"
+	fi
+	for host in $hosts_to_run
+	do
+		if [ -f "$_HS_CFG_INVENTORY_PATH$host" ]; then
+			((++num))
+			#[[ $a == z* ]]
+			while read cfg_line; do
+				if [[ $# -eq 0 && $cfg_line != '#'* && $cfg_line != "" ]]; then
+					$(echo "$cfg_line" | cut -d: -f1) "$(echo "$cfg_line" | cut -d: -f2)"
+				elif [[ $cfg_line == "$1:"* ]]; then
+					$1 "$(echo "$cfg_line" | cut -d: -f2)"
+				fi
+			done < "$_HS_CFG_INVENTORY_PATH$host"
+		else
+			log $w "No configuration found for host '$host'."
+		fi
+	done
+	[ $num -eq 0 ] && fatal "No matching hosts found in '$_HS_CFG_INVENTORY_PATH'"
+}
+
+# Run a command
+# This function runs a command according to the config syntax
+# Usage: _run_command <command>
+# Note: This function is not pure
+function _run_command()
+{
+	if [[ "${_args[@]:2}" == "" ]]; then
+		if [ -z ${_hs_hosts+x} ]; then
+			while true; do
+				printf "$i::$r Do you wish to run all $1 commands in all hosts? [y/N] "
+				read yn
+				case $yn in
+					[Yy]* ) _run_host_cfg run_$1; break;;
+					[Nn]* | '' ) exit;;
+					* ) ;;
+				esac
+			done
+		else
+			_run_host_cfg run_$1
+		fi
+	else
+		run_$1 ${_args[@]:2}
+	fi
+}
+
+
+# ======================= MAIN =======================
+
+# check for secrets folder link
+if [ ! -L secrets ] || [[ -L secrets && ! -e secrets ]]; then
+	fatal "There's no 'secrets' link or it's broken! Link it with your secure drive and make sure it's a valid symbolic link"
+fi
+
+#check if ansible exists
+command -v ansible >/dev/null 2>&1 || fatal "Ansible is not installed. Aborting"
+
+# global args array
+declare -a _args=()
+
+parse_args $0 "$@"
+
+[ ! -z ${_hs_help_wanted+x} ] && print_help
+
+case "${_args[1]}" in
+	playbook | playbooks)
+		_run_command playbook
+		;;
+	docker)
+		_run_command docker
+		;;
+	all | '')
+		_run_host_cfg
+		;;
+	*)
+		log $e "Invalid command provided!"
+		print_help 1
+		;;
+esac
