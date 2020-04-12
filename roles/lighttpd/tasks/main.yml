@@ -11,7 +11,7 @@
 - name: enable and start lighttpd service
   systemd:
     name: lighttpd
-    state: started
+    state: restarted
     enabled: yes
 
 - name: open tcp firewall holes
