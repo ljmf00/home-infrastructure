@@ -13,3 +13,4 @@ users:
     groups:
       - user
       - admin
+      - smbuser
