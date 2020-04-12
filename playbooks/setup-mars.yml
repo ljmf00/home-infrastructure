@@ -1,0 +1,10 @@
+---
+
+- name: setup mars
+  hosts: mars.lsferreira.net
+  roles:
+    - { role: common, tags: ['common'] }
+    - { role: users, tags: ['users'] }
+    - { role: ssh_root, tags: ['ssh_root'] }
+    - { role: sudo, tags: ['sudo'] }
+    - { role: firewall, tags: ['firewall'] }
