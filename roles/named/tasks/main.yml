@@ -1,0 +1,26 @@
+---
+
+- name: Install named
+  pacman: name=bind state=present
+
+- name: named configuration
+  copy:
+    src: named.conf
+    dest: /etc/named.conf
+
+- name: enable and start named service
+  systemd:
+    name: named
+    state: restarted
+    enabled: yes
+
+- name: open firewall holes
+  ufw:
+    rule: allow
+    port: domain
+    proto: "{{ item }}"
+  tags:
+    - firewall
+  with_items:
+    - tcp
+    - udp
