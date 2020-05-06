@@ -13,6 +13,7 @@ users:
     groups:
       - user
       - admin
+      - docker
   luis:
     name: 'Luís Ferreira'
     ssh_key: luis.pub
@@ -20,6 +21,7 @@ users:
     groups:
       - user
       - admin
+      - docker
 
   cornucopia:
     name: 'Cornucopiazul .Lda'
