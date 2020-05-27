@@ -1,0 +1,110 @@
+---
+
+- name: install archbuild
+  pacman:
+    name:
+      - devtools
+      - zsh
+      - git
+      - subversion
+      - mercurial
+      - bzr
+      - ruby
+      - tig
+      - colordiff
+      - pkgdiff
+      - elinks
+      - appstream-generator
+    state: present
+
+- name: install archbuild scripts
+  copy: src={{ item }} dest=/usr/local/bin/{{ item }} owner=root group=root mode=0755
+  with_items:
+    - mkpkg
+    - diffpkg
+    - diffrepo
+    - pkgdiffrepo
+    - clean-chroots
+    - clean-dests
+    - gitpkg
+
+- name: install archbuild config files
+  copy: src={{ item }} dest=/usr/local/share/{{ item }} owner=root group=root mode=0644
+  with_items:
+    - elinks-pkgdiffrepo.conf
+
+- name: install archbuild units
+  copy: src={{ item }} dest=/etc/systemd/system/{{ item }} owner=root group=root mode=0644
+  with_items:
+    - clean-chroots.timer
+    - clean-chroots.service
+    - clean-dests.timer
+    - clean-dests.service
+    - var-lib-archbuilddest.mount
+    - strictatime@.service
+  notify:
+    - daemon reload
+
+- name: install archbuild unit
+  copy: src={{ item }} dest=/etc/systemd/system/{{ item }} owner=root group=root mode=0644
+  with_items:
+    - var-lib-archbuild.mount
+  notify:
+    - daemon reload
+
+- name: install archbuild user units
+  copy: src={{ item }} dest=/etc/systemd/user/{{ item }} owner=root group=root mode=0644
+  with_items:
+    - mkpkg@.timer
+    - mkpkg@.service
+
+- name: start and enable archbuild mounts
+  service: name={{ item }} enabled={{"yes" if archbuild_fs == 'tmpfs' else "no"}} state={{"started" if archbuild_fs == 'tmpfs' else "stopped"}}
+  with_items:
+    - var-lib-archbuild.mount
+
+- name: start and enable archbuilddest mount
+  service: name={{ item }} enabled=yes state=started
+  with_items:
+    - var-lib-archbuilddest.mount
+
+- name: create archbuilddest
+  file:
+    state: directory
+    path: '/var/lib/{{ "/".join(item) }}'
+    owner: root
+    group: root
+    mode: 0777
+  with_nested:
+    - [archbuilddest]
+    - [srcdest]
+
+- name: set acl on archbuilddest
+  acl:
+    name: '/var/lib/archbuilddest/{{ item[0] }}'
+    state: present
+    entry: '{{ item[1] }}'
+  with_nested:
+    - [srcdest]
+    - ['user::rwx',
+       'group::rwx',
+       'group:dev:rwx',
+       'other::rwx',
+       'mask::rwx',
+       'default:user::rwx',
+       'default:group::r-x',
+       'default:group:dev:rwx',
+       'default:other::r-x',
+       'default:mask::rwx']
+
+- name: start and enable archbuild units
+  service: name={{ item }} enabled=yes state=started
+  with_items:
+    - clean-chroots.timer
+    - clean-dests.timer
+
+- name: install makepkg.conf
+  template: src=makepkg.conf.j2 dest=/etc/makepkg.conf owner=root group=root mode=0644
+
+- name: install archbuild sudoers config
+  copy: src=sudoers dest=/etc/sudoers.d/archbuild
