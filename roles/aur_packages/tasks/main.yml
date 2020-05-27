@@ -1,0 +1,15 @@
+---
+
+- name: Install group aur packages
+  aur: name="{{ item }}" use=yay skip_installed=true
+  become: yes
+  become_user: aur_builder
+  with_items: '{{ install_group_packages.aur }}'
+  when: install_group_packages.aur is not empty
+
+- name: Install host aur packages
+  aur: name="{{ item }}" use=yay skip_installed=true
+  become: yes
+  become_user: aur_builder
+  with_items: '{{ install_host_packages.aur }}'
+  when: install_host_packages.aur is not empty
