@@ -1,0 +1,16 @@
+---
+
+- name: create mount directories
+  file:
+    path: '{{ item.mount_point }}'
+    state: directory
+    recurse: yes
+  with_items: '{{ mount_disks }}'
+
+- name: Mount disks
+  mount:
+    path: '{{ item.mount_point }}'
+    src: '{{ item.device }}'
+    fstype: '{{ item.type }}'
+    state: mounted
+  with_items: '{{ mount_disks }}'
