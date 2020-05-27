@@ -1,0 +1,58 @@
+---
+
+- name: Install virtualgl and dependencies explicitly
+  pacman:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - inetutils
+    - opencl-mesa
+    - virtualgl
+    - lib32-virtualgl
+
+- name: add vglusers group
+  group:
+    name: vglusers
+    state: present
+
+# https://github.com/ansible/ansible/issues/11024
+- name: remove all users from vglusers group
+  command: groupmems -g vglusers --purge
+
+- name: add admin users to vglusers
+  user:
+    name: '{{ item.key }}'
+    append: yes
+    groups: vglusers
+  with_dict: '{{ users }}'
+  when: '"admin" in item.value.groups'
+
+- name: Install xorg dependencies for remote socket forwarding
+  pacman:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - xorg-xauth
+    - xorg-xhost
+
+- name: Install lightdm display manager
+  pacman:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - lightdm
+    - lightdm-gtk-greeter
+
+- name: Configure vglserver config
+  shell: echo -e "1\ny\ny\ny\nX\n" | vglserver_config
+
+- name: enable and start lightdm service
+  systemd:
+    name: lightdm
+    state: restarted
+    enabled: yes
+
+- name: Install vnc server
+  pacman:
+    name: tigervnc
+    state: present
