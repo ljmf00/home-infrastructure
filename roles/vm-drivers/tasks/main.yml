@@ -1,0 +1,9 @@
+---
+
+- name: Install virtual machine related chocolatey packages
+  win_chocolatey:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - virtio-drivers
+    - spice-agent
