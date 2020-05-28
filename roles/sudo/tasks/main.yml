@@ -27,10 +27,20 @@
     path: /etc/sudoers
     line: '#includedir /etc/sudoers.d'
 
-- name: install sudo rule
-  copy:
-    src: wheel_group
-    dest: /etc/sudoers.d/wheel_group
-    mode: 0644
-    owner: root
-    group: root
+- name: allow wheel group to use sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel ALL=\(ALL\) ALL'
+    insertafter: '^# %wheel ALL=\(ALL\) ALL'
+    line: '%wheel ALL=(ALL) ALL'
+    validate: 'visudo -cf %s'
+
+- name: secure path to protect against attacks
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/bin"'
+    insertafter: '^# Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'
+    line: 'Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/bin"'
+    validate: 'visudo -cf %s'
