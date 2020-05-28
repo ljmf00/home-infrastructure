@@ -1,0 +1,20 @@
+---
+
+- name: Upgrade installed chocolatey packages
+  win_chocolatey:
+    name: all
+    state: latest
+
+- name: Install all critical and security updates
+  win_updates:
+    category_names:
+    - CriticalUpdates
+    - SecurityUpdates
+    state: installed
+  register: update_result
+
+- name: Reboot host if required
+  win_reboot:
+    msg: Reboot initiated by an administrator, you have 60 seconds to save your work.
+    pre_reboot_delay: 60
+  when: update_result.reboot_required
