@@ -1,3 +1,5 @@
 #run_prepare:
 run_playbook:setup-common
+run_playbook:setup-mars
+run_playbook:install-aur-pkgs
 run_playbook:update-mirrorslist

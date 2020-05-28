@@ -1,0 +1,12 @@
+---
+
+mount_disks:
+  # - mount_point: /mnt/disk500
+  #   device: UUID="64acf3d2-9f70-4aa8-9df2-a3d0b4196210"
+  #   type: ext4
+  - mount_point: /mnt/disk1
+    device: UUID="178c9ee0-d777-45f1-906f-ff054bbe575f"
+    type: ext4
+  - mount_point: /mnt/disk2
+    device: UUID="b341ced4-f6c4-4b30-84a7-ff31b02aeb53"
+    type: ext4

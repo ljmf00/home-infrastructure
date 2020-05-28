@@ -1,0 +1,7 @@
+---
+
+- name: common setup playbook
+  hosts: personal
+  roles:
+    - { role: aur, tags: ['aur'] }
+    - { role: yay, tags: ['yay'] }

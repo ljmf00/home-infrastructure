@@ -2,6 +2,7 @@
 
 user_groups:
   - user
+  - dev
   - admin
   - smbuser
 
@@ -12,5 +13,6 @@ users:
     shell: /usr/bin/zsh
     groups:
       - user
+      - dev
       - admin
       - smbuser

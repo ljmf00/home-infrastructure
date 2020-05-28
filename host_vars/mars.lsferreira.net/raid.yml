@@ -6,5 +6,5 @@ raid_disks:
     type: ext4
   ## soon (TM)
   # - mount_point: /mnt/raid0-md2
-  #   device: /dev/md3
+  #   device: /dev/md2
   #   type: ext4

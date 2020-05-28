@@ -1,0 +1,18 @@
+---
+
+- name: setup Windows mars virtual machine
+  hosts: mars-win.lsferreira.net
+  remote_user: luis
+  gather_facts: false
+  vars:
+    ansible_remote_tmp: C:\Users\{{ ansible_user }}\AppData\Local\Temp
+    ansible_control_path_dir: C:\Users\{{ ansible_user }}\.ansible\cp
+    ansible_shell_type: cmd
+    ansible_become_method: runas
+    ansible_become_user: administrator
+  roles:
+    - { role: win-chocolatey-packages, tags: ['win-chocolatey-packages'] }
+    - { role: vm-drivers, tags: ['vm-drivers'] }
+    - { role: visualstudio, tags: ['visualstudio'] }
+    - { role: windows-updates, tags: ['windows-updates'] }
+    - { role: java, tags: ['java'] }

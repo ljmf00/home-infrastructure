@@ -73,13 +73,18 @@ install_group_packages:
     - neovim-qt
     - python-neovim
     - code
+    - libva-mesa-driver
+    - mesa-vdpau
+    - libva-vdpau-driver
+    - intel-media-driver
+    - libva-intel-driver
+    - steam
 
   aur:
     - polybar
     - oh-my-zsh-git
     - i3lock-color
     - betterlockscreen
-    - osx-arc-shadow
     - captain-frank-cursors-git
     - i3-battery-popup-git
     - pamac-aur
@@ -91,3 +96,25 @@ install_group_packages:
     - spotify
     - blockify
     - musixmatch-bin
+  chocolatey:
+    - notepadplusplus
+    - git
+    - 7zip
+    - firefox
+    - vlc
+    - irfanview
+    - wumt
+    - wpd
+    - everything
+    - vcredist-all
+    - intellijidea-community
+    - ccleaner
+    - vscode
+
+    ## broken chocolatey packages
+    #- wps-office-free
+
+    ## disabled aur packages
+    #- vmware-workstation
+    ## broken aur packages
+    #- osx-arc-shadow

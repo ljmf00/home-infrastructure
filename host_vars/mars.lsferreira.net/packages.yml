@@ -2,4 +2,15 @@
 
 install_host_packages:
   official:
+    - nvidia-dkms
+    - opencl-nvidia
+    - nvidia-settings
+    - nvidia-utils
+    - lib32-nvidia-utils
+    - nvidia-libgl
+    - lib32-nvidia-libgl
+    - opencl-nvidia
+    - lib32-opencl-nvidia
+    - libva-vdpau-driver
+    - lib32-libva-vdpau-driver
   aur:
