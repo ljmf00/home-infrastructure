@@ -1,0 +1,17 @@
+---
+
+- name: Install group packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ install_group_packages.official }}"
+   when: install_group_packages.official
+
+- name: Install host packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ install_host_packages.official }}"
+  when: install_host_packages.official
