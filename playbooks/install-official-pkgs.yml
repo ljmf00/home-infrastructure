@@ -1,0 +1,8 @@
+---
+
+- name: install official packages
+  hosts:
+    - mars.lsferreira.net
+    - deimos.lsferreira.net
+  roles:
+    - { role: official_packages, tags: ['official_packages'] }
