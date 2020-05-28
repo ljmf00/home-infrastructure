@@ -2,13 +2,12 @@
 
 - name: common setup playbook
   hosts:
-    - luna.lsferreira.net
-    - mars.lsferreira.net
-    - torns.lsferreira.net
-    - deimos.lsferreira.net
+    - all
+    - '!phobos.lsferreira.net'
   roles:
     - { role: common, tags: ['common'] }
     - { role: users, tags: ['users'] }
     - { role: ssh_root, tags: ['ssh_root'] }
     - { role: sudo, tags: ['sudo'] }
     - { role: firewall, tags: ['firewall'] }
+    - { role: archbuild, tags: ['archbuild'] }
