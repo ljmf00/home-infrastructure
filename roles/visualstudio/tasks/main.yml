@@ -1,0 +1,27 @@
+---
+
+- name: Install visualstudio chocolatey packages
+  win_chocolatey:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - visualstudio2019buildtools
+    - visualstudio2019testagent
+    - visualstudio2019community
+    - visualstudio2019testcontroller
+    - visualstudio2019-workload-netcoretools
+    - visualstudio2019-workload-netcorebuildtools
+    - visualstudio2019-workload-manageddesktopbuildtools
+    - visualstudio2019-remotetools
+    - visualstudio2019-performancetools
+    - visualstudio2019-workload-manageddesktop
+    - visualstudio2019-workload-netweb
+    - visualstudio2019-workload-data
+    - visualstudio2019-workload-netcrossplat
+    - visualstudio2019-workload-vctools
+    - visualstudio2019-workload-datascience
+    - visualstudio2019-workload-universal
+    - visualstudio2019-workload-universalbuildtools
+    - visualstudio2019-workload-webbuildtools
+    - visualstudio2019-workload-xamarinbuildtools
+    - visualstudio2019-workload-databuildtools
