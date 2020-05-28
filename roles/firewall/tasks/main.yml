@@ -6,9 +6,9 @@
 - name: Install 'ufw-extras'
   pacman: name=ufw-extras state=present
 
-- name: Allow but limit ssh connections
+- name: Allow ssh connections
   ufw:
-    rule: limit
+    rule: allow
     port: ssh
     proto: tcp
 
