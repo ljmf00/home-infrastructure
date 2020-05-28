@@ -1,5 +1,12 @@
 ---
 
+- name: create mount directories
+  file:
+    path: '{{ item.mount_point }}'
+    state: directory
+    recurse: yes
+  with_items: '{{ raid_disks }}'
+
 - name: Mount RAID disks
   mount:
     path: '{{ item.mount_point }}'
