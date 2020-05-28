@@ -1,0 +1,17 @@
+
+
+- name: Install group chocolatey packages
+  win_chocolatey:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ install_group_packages.chocolatey }}"
+  when: install_group_packages is defined and install_group_packages.chocolatey
+
+- name: Install host chocolatey packages
+  win_chocolatey:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ install_host_packages.chocolatey }}"
+  when: install_host_packages is defined and install_host_packages.chocolatey
