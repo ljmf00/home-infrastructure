@@ -1,0 +1,125 @@
+---
+
+- name: Allow openvpn tcp connections
+  ufw:
+    rule: allow
+    port: '1194'
+    proto: tcp
+
+- name: Allow openvpn udp connections
+  ufw:
+    rule: allow
+    port: '1194'
+    proto: udp
+
+- name: Allow openvpn public tcp connections
+  ufw:
+    rule: allow
+    port: '1195'
+    proto: tcp
+
+- name: Allow postrouting on 10.8.0.0/24 network
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    source: 10.8.0.0/24
+    out_interface: nm-bridge
+    jump: MASQUERADE
+
+- name: Allow postrouting on 10.8.0.0/24 network to 10.8.1.0/24
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    source: 10.8.0.0/24
+    destination: 10.8.1.0/24
+    jump: MASQUERADE
+
+- name: Allow postrouting on 10.8.0.0/24 network to 10.8.2.0/24
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    source: 10.8.0.0/24
+    destination: 10.8.2.0/24
+    jump: MASQUERADE
+
+- name: Allow postrouting on 10.8.1.0/24 network
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    source: 10.8.1.0/24
+    out_interface: nm-bridge
+    jump: MASQUERADE
+
+- name: Allow postrouting on 10.8.1.0/24 network to 10.8.0.0/24
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    source: 10.8.1.0/24
+    destination: 10.8.0.0/24
+    jump: MASQUERADE
+
+- name: Allow postrouting on 10.8.1.0/24 network to 10.8.2.0/24
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    source: 10.8.1.0/24
+    destination: 10.8.2.0/24
+    jump: MASQUERADE
+
+- name: Allow postrouting on 10.8.2.0/24 network
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    source: 10.8.2.0/24
+    out_interface: nm-bridge
+    jump: MASQUERADE
+
+- name: Deny 10.8.2.0/24 to Local network
+  ufw:
+    rule: deny
+    src: 10.8.2.0/24
+    dest: 192.168.1.0/24
+
+- name: Deny forward on 10.8.2.0/24 to Local network
+  iptables:
+    action: insert
+    chain: FORWARD
+    source: 10.8.2.0/24
+    destination: 192.168.1.0/24
+    jump: DROP
+
+- name: Deny input on 10.8.2.0/24 to Local network
+  iptables:
+    action: insert
+    chain: INPUT
+    source: 10.8.2.0/24
+    destination: 192.168.1.0/24
+    jump: DROP
+
+- name: Deny forward on 10.8.2.0/24 to Local network
+  iptables:
+    action: insert
+    chain: FORWARD
+    source: 10.8.2.0/24
+    protocol: icmp
+    icmp_type: '8'
+    destination: 192.168.1.0/24
+    jump: DROP
+
+- name: Deny forward on 10.8.2.0/24 to Local network
+  iptables:
+    action: insert
+    chain: INPUT
+    source: 10.8.2.0/24
+    protocol: icmp
+    icmp_type: '8'
+    destination: 192.168.1.0/24
+    jump: DROP
+
+- name: Save IPv4 iptables
+  shell: "iptables-save > /etc/iptables/iptables.rules"
+  changed_when: false
+
+- name: save IPv6 iptables
+  shell: "ip6tables-save > /etc/iptables/ip6tables.rules"
+  changed_when: false
