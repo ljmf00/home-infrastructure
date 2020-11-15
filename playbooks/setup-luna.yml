@@ -4,3 +4,8 @@
   hosts: luna.lsferreira.net
   roles:
     - { role: named, tags: ['named'] }
+    - { role: samba, tags: ['samba'] }
+    - { role: syncrepo, tags: ['syncrepo'] }
+    - { role: lighttpd, tags: ['lighttpd'] }
+    - { role: named, tags: ['named'] }
+    - { role: openvpn, tags: ['openvpn'] }
