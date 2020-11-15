@@ -6,4 +6,4 @@
     - { role: mount, tags: ['mount'] }
     - { role: kvm, tags: ['kvm'] }
     - { role: libvirt, tags: ['libvirt'] }
-    - { role: virtualgl, tags: ['virtualgl'] }
+    #- { role: virtualgl, tags: ['virtualgl'] }
