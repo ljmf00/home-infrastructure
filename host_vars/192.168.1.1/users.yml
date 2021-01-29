@@ -4,7 +4,6 @@ user_groups:
   - user
   - dev
   - admin
-  - smbuser
 
 users:
   alex:
@@ -13,9 +12,6 @@ users:
     shell: /usr/bin/zsh
     groups:
       - user
-      - dev
-      - admin
-      - smbuser
   luis:
     name: 'Luís Ferreira'
     ssh_key: luis.pub
@@ -24,10 +20,3 @@ users:
       - user
       - dev
       - admin
-      - smbuser
-
-  cornucopia:
-    name: 'Cornucopiazul .Lda'
-    shell: /sbin/nologin
-    groups:
-      - smbuser

@@ -1,10 +1,16 @@
 ---
 
 - name: setup luna
-  hosts: luna.lsferreira.net
+  hosts: 192.168.1.1
   roles:
+    - { role: common, tags: ['common'] }
+    - { role: users, tags: ['users'] }
+    - { role: ssh_root, tags: ['ssh_root'] }
+    - { role: sudo, tags: ['sudo'] }
+    - { role: firewall, tags: ['firewall'] }
+    - { role: archbuild, tags: ['archbuild'] }
     - { role: named, tags: ['named'] }
-    - { role: samba, tags: ['samba'] }
     - { role: syncrepo, tags: ['syncrepo'] }
     - { role: lighttpd, tags: ['lighttpd'] }
     - { role: openvpn, tags: ['openvpn'] }
+    - { role: yay, tags: ['yay'] }
