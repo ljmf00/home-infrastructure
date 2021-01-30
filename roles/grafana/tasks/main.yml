@@ -1,0 +1,30 @@
+---
+
+- name: install grafana
+  pacman: name=grafana state=present
+
+- name: install prometheus
+  pacman: name=prometheus state=present
+
+- name: install prometheus exporter
+  pacman: name=prometheus-node-exporter state=present
+
+- name: install grafana config
+  template: src=grafana.ini.j2 dest=/etc/grafana.ini owner=grafana group=root mode=0600
+  notify: restart grafana
+
+- name: fix /var/lib/grafana permissions
+  file: path=/var/lib/grafana mode=0700 owner=grafana group=grafana
+
+- name: install prometheus configs
+  copy: src=prometheus.yml dest=/etc/prometheus/prometheus.yml owner=root group=root mode=0644
+  notify: restart prometheus
+
+- name: start and enable service
+  service: name=grafana state=started enabled=true
+
+- name: start and enable prometheus service
+  service: name=prometheus state=started enabled=true
+
+- name: start and enable prometheus exporter service
+  service: name=prometheus-node-exporter state=started enabled=true
