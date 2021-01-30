@@ -15,7 +15,7 @@ users:
   luis:
     name: 'Luís Ferreira'
     ssh_key: luis.pub
-    shell: /usr/bin/zsh
+    shell: /usr/bin/bash
     groups:
       - user
       - dev
