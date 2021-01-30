@@ -43,16 +43,27 @@ This machine should be installed with `linux-lts` due to **fucking** nvidia.
 This machine should have `mdadm` package and `md3` disks in software RAID
 pre-configured.
 
-### `torns` machine
+### `luna` machine
 
 This server should be installed with `linux-hardened`.
 
-This machine should have `mdadm` package and `md80` and `md40` disks in software
-RAID pre-configured.
+This machine should have `mdadm` package and configured following the below schema:
 
-## Post-configuration
-
-### `torns` machine
-
-After all configurations applied, make sure smb users doesn't have the default
-password.
+```
+NAME      MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
+sda         8:0    0  37.3G  0 disk
+└─md127     9:127  0  74.5G  0 raid0 /srv
+sdb         8:16   0  37.3G  0 disk
+└─md127     9:127  0  74.5G  0 raid0 /srv
+sdc         8:32   0 111.8G  0 disk
+├─sdc1      8:33   0   100G  0 part  /
+└─sdc2      8:34   0  11.8G  0 part  [SWAP]
+sdd         8:48   0   2.7T  0 disk
+└─sdd1      8:49   0   2.7T  0 part
+  └─md126   9:126  0   2.7T  0 raid1 /mnt
+sde         8:64   0 149.1G  0 disk
+└─sde1      8:65   0   149G  0 part  /home
+sdf         8:80   0   2.7T  0 disk
+└─sdf1      8:81   0   2.7T  0 part
+  └─md126   9:126  0   2.7T  0 raid1 /mnt
+```
