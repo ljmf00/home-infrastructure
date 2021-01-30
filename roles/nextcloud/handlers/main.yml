@@ -1,0 +1,4 @@
+---
+
+- name: restart php7-fpm@nextcloud
+  service: name=php7-fpm@{{ nextcloud_user }} state=restarted

@@ -1,0 +1,11 @@
+---
+nextcloud_dir: '/usr/share/webapps/nextcloud'
+nextcloud_data_dir: '/home/nextcloud/data'
+
+nextcloud_db: 'nextcloud'
+nextcloud_db_host: 'localhost'
+nextcloud_db_user: 'nextcloud'
+
+nextcloud_socket: '/run/php7-fpm/nextcloud.socket'
+nextcloud_user: 'nextcloud'
+nextcloud_group: 'nextcloud'

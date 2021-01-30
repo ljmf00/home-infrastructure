@@ -1,0 +1,51 @@
+- name: install nextcloud
+  pacman: name=nextcloud state=present
+
+- name: install nextcloud apps
+  pacman:
+    state: present
+    name:
+      - nextcloud-app-bookmarks
+      - nextcloud-app-calendar
+      - nextcloud-app-contacts
+      - nextcloud-app-deck
+      - nextcloud-app-mail
+      - nextcloud-app-news
+      - nextcloud-app-notes
+      - nextcloud-app-spreed
+      - nextcloud-app-tasks
+
+- name: pacman hooks directory
+  file: state=directory path=/etc/pacman.d/hooks owner=root group=root mode=0755
+
+- name: install nextcloud pacman hook
+  copy: src=nextcloud.hook dest=/etc/pacman.d/hooks/nextcloud.hook owner=root group=root mode=0644
+
+- name: create nextcloud db users
+  postgresql_user: name={{ item.user }} password={{ item.password }} login_host="{{ nextcloud_db_host }}" login_password="{{ postgres_password }}" encrypted=yes
+  no_log: true
+  with_items:
+    - { user: "{{ nextcloud_db_user }}", password: "{{ nextcloud_db_password }}" }
+
+- name: create nextcloud db
+  postgresql_db: name="{{ nextcloud_db }}" login_host="{{ nextcloud_db_host }}" login_password="{{ postgres_password }}" owner="{{ nextcloud_db_user }}"
+  register: db_created
+
+- name: nextcloud data directory
+  file: state=directory path=/home/nextcloud/data owner={{ nextcloud_user }} group={{ nextcloud_user }} mode=0750
+
+- name: webapp nextcloud data directory
+  file: state=directory path=/usr/share/webapps/nextcloud/data owner={{ nextcloud_user }} group={{ nextcloud_user }} mode=0750 recurse=yes
+
+- name: webapp nextcloud apps directory
+  file: state=directory path=/usr/share/webapps/nextcloud/apps owner={{ nextcloud_user }} group=http mode=0750 recurse=yes
+
+- name: webapp nextcloud apps directory
+  file: state=directory path=/etc/webapps/nextcloud/config owner={{ nextcloud_user }} group={{ nextcloud_user }} mode=0750 recurse=yes
+
+- name: configure php-fpm
+  template:
+    src=php7-fpm.conf.j2 dest="/etc/php7/php-fpm.d/{{ nextcloud_user }}.conf"
+    owner=root group=root mode=0644
+  notify:
+    - restart php7-fpm@{{ nextcloud_user }}
