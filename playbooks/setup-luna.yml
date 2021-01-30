@@ -7,6 +7,8 @@
     - { role: users, tags: ['users'] }
     - { role: ssh_root, tags: ['ssh_root'] }
     - { role: sudo, tags: ['sudo'] }
+    - { role: hardening, tags: ['hardening'] }
+    - { role: tools, tags: ['tools'] }
     - { role: firewall, tags: ['firewall'] }
     - { role: archbuild, tags: ['archbuild'] }
     - { role: named, tags: ['named'] }
@@ -14,3 +16,6 @@
     - { role: lighttpd, tags: ['lighttpd'] }
     - { role: openvpn, tags: ['openvpn'] }
     - { role: yay, tags: ['yay'] }
+    - { role: certbot, tags: ['certbot'] }
+    - { role: grafana, tags: ['grafana'] }
+    - { role: nginx, tags: ['nginx'] }
