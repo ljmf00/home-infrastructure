@@ -1,0 +1,54 @@
+- name: install sysadmin tools
+  pacman:
+    state: present
+    name:
+      - htop
+      - rsync
+      - tmux
+      - sshfs
+      - tree
+      - dstat
+      - dmidecode
+      - net-tools
+      - nmap
+      - sysstat
+      - screen
+      - nload
+
+- name: install misc utils
+  pacman:
+    state: present
+    name:
+      - colordiff
+      - multitail
+      - httpie
+      - the_silver_searcher
+      - ripgrep
+      - cloc
+      - tokei
+      - ipcalc
+      - calc
+      - wget
+      - neovim
+      - python-pynvim
+      - vim
+      - parallel
+      - bash-completion
+      - socat
+      - pv
+      - ccze
+      - rxvt-unicode-terminfo
+      - termite-terminfo
+      - p7zip
+      - unzip
+      - setconf
+      - fish
+      - bat
+      - hexyl
+      - stow
+      - fzf
+      - fasd
+      - ranger
+      - vifm
+      - git
+      - perl-term-readkey
