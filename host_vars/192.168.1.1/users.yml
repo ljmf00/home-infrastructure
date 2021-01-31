@@ -4,6 +4,7 @@ user_groups:
   - user
   - dev
   - admin
+  - docker
 
 users:
   alex:
@@ -20,3 +21,4 @@ users:
       - user
       - dev
       - admin
+      - docker

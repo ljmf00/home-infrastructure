@@ -19,3 +19,4 @@
     - { role: certbot, tags: ['certbot'] }
     - { role: grafana, tags: ['grafana'] }
     - { role: nginx, tags: ['nginx'] }
+    - { role: docker, tags: ['docker'] }
