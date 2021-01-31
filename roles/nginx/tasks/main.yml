@@ -63,12 +63,16 @@
     rule: allow
     port: http
     proto: tcp
+  tags:
+    - firewall
 
 - name: Allow https connections
   ufw:
     rule: allow
     port: https
     proto: tcp
+  tags:
+    - firewall
 
 - name: set up nginx
   template: src=nginx.d.conf.j2 dest=/etc/nginx/nginx.d/domain.conf owner=root group=root mode=644
