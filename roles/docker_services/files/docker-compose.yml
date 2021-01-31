@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  app:
+    image: nextcloud:stable-apache
+    restart: unless-stopped
+    volumes:
+      - /mnt/Volumes/Nextcloud:/var/www/html
+    ports:
+      - 8888:80
+    environment:
+      - APACHE_DISABLE_REWRITE_IP=1
+      - TRUSTED_PROXIES=luna.lsferreira.net
+      - OVERWRITEPROTOCOL=https
+      - OVERWRITEHOST=luna.lsferreira.net
+      - OVERWRITEWEBROOT=/nextcloud

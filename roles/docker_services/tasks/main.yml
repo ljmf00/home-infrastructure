@@ -1,0 +1,24 @@
+---
+
+- name: copy Docker Compose files
+  copy:
+    src: '{{ item }}'
+    dest: /mnt/DockerServices/{{ item }}
+  with_items:
+    - docker-compose.yml
+
+- name: Prune everything (including non-dangling images)
+  community.general.docker_prune:
+    containers: yes
+    images: yes
+    images_filters:
+      dangling: false
+    networks: yes
+    volumes: yes
+    builder_cache: yes
+  tags:
+    - task_docker_prune
+
+- name: Create and start services
+  community.general.docker_compose:
+    project_src: /mnt/DockerServices
