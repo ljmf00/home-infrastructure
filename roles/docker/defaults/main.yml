@@ -1,0 +1,5 @@
+---
+
+docker_dir: '/home/docker'
+docker_data_dir: '/home/docker/data'
+docker_user: 'docker'

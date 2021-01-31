@@ -1,0 +1,24 @@
+---
+
+- name: install docker
+  pacman: name=docker,docker-compose state=present
+
+- name: make docker user
+  user: name="{{ docker_user }}" shell=/bin/false home="{{ docker_dir }}" createhome=yes
+  register: user_created
+
+- name: fix home permissions
+  file: state=directory owner="{{ docker_user }}" group="{{ docker_user }}" path="{{ docker_dir }}"
+
+- name: fix data dir permissions
+  file: state=directory owner="{{ docker_user }}" group="{{ docker_user }}" path="{{ docker_data_dir }}"
+
+- name: create docker config dir
+  file: state=directory owner=root group=root path=/etc/docker/
+
+- name: install docker config
+  template: src=daemon.json.j2 dest=/etc/docker/daemon.json owner=root group=root mode=0600
+  notify: restart docker
+
+- name: start and enable service
+  service: name=docker state=started enabled=true
