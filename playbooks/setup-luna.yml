@@ -20,3 +20,4 @@
     - { role: grafana, tags: ['grafana'] }
     - { role: nginx, tags: ['nginx'] }
     - { role: docker, tags: ['docker'] }
+    - { role: docker_services, tags: ['docker_services'] }

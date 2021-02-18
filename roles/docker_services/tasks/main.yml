@@ -1,11 +1,9 @@
 ---
 
 - name: copy Docker Compose files
-  copy:
-    src: '{{ item }}'
-    dest: /mnt/DockerServices/{{ item }}
-  with_items:
-    - docker-compose.yml
+  template:
+    src: 'docker-compose.yml.j2'
+    dest: /mnt/DockerServices/docker-compose.yml
 
 - name: Prune everything (including non-dangling images)
   community.general.docker_prune:

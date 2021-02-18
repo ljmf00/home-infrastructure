@@ -12,7 +12,11 @@
     - restart nginx
 
 - name: make nginx log dir
-  file: path=/var/log/nginx/{{ server_http_domain }} state=directory owner=root group=root mode=0755
+  file: path=/var/log/nginx/{{ item }} state=directory owner=root group=root mode=0755
+  with_items:
+    - '{{ server_http_domain }}'
+    - '{{ nextcloud_http_domain }}'
+    - '{{ server_root_domain }}'
 
 - name: snippets directories
   file: state=directory path=/etc/nginx/{{ item }} owner=root group=root mode=0755
@@ -80,6 +84,10 @@
     - reload nginx
   tags: ['nginx']
 
-- name: create ssl cert
+- name: create ssl cert for server domain
   command: certbot certonly --email webmaster@lsferreira.net --agree-tos --rsa-key-size 4096 --renew-by-default --webroot -w {{ letsencrypt_validation_dir }} -d '{{ server_http_domain }}' creates='/etc/letsencrypt/live/{{ server_http_domain }}/fullchain.pem'
   when: 'server_http_domain is defined'
+
+- name: create ssl cert for nextcloud domain
+  command: certbot certonly --email webmaster@lsferreira.net --agree-tos --rsa-key-size 4096 --renew-by-default --webroot -w {{ letsencrypt_validation_dir }} -d '{{ nextcloud_http_domain }}' creates='/etc/letsencrypt/live/{{ nextcloud_http_domain }}/fullchain.pem'
+  when: 'nextcloud_http_domain is defined'
