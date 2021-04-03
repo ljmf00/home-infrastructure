@@ -17,6 +17,7 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/Volumes/Nextcloud:/var/www/html
+      - /mnt/Personal:/mnt/Personal:ro
     ports:
       - 8888:80
     links:
