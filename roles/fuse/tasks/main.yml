@@ -1,0 +1,14 @@
+---
+
+- name: Install Fuse package
+  package:
+    name: "fuse-common"
+    state: present
+
+- name: add fuse configuration
+  template:
+    src: fuse.conf.j2
+    dest: '/etc/fuse.conf'
+    mode: 0644
+    owner: root
+    group: root
