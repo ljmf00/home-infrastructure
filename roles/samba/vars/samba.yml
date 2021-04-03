@@ -11,6 +11,3 @@ samba_services:
 
 samba_configuration_dir: /etc/samba
 samba_configuration: "{{ samba_configuration_dir }}/smb.conf"
-samba_username_map_file: "{{ samba_configuration_dir }}/smbusers"
-
-samba_www_documentroot: /var/www
