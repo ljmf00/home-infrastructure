@@ -1,0 +1,10 @@
+[Unit]
+Description=InterPlanetary File System (IPFS) daemon
+
+[Service]
+ExecStart=/usr/bin/ipfs daemon --enable-gc
+Restart=on-failure
+Environment="IPFS_PATH=/mnt/IPFSRepo/"
+
+[Install]
+WantedBy=default.target

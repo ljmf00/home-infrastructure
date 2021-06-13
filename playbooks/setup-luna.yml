@@ -23,3 +23,4 @@
     - { role: docker_services, tags: ['docker_services'] }
     - { role: fuse, tags: ['fuse'] }
     - { role: samba, tags: ['samba'] }
+    - { role: ipfs, tags: ['ipfs'] }

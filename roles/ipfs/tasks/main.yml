@@ -1,0 +1,40 @@
+---
+
+- name: install go-ipfs
+  pacman: name=go-ipfs state=present
+
+- name: Install ipfs-cluster aur package
+  aur: name="ipfs-cluster-bin" use=yay skip_installed=true
+  become: yes
+  become_user: aur_builder
+
+- name: install ipfs units
+  copy: src={{ item }} dest=/etc/systemd/system/{{ item }} owner=root group=root mode=0644
+  with_items:
+    - ipfs.service
+  notify:
+    - daemon reload
+
+- name: start and enable ipfs units
+  service: name={{ item }} enabled=yes state=started
+  with_items:
+    - ipfs.service
+
+- name: open tcp/udp firewall holes for swarm
+  ufw:
+    rule: allow
+    port: 4001
+    proto: '{{ item }}'
+  with_items:
+    - tcp
+    - udp
+  tags:
+    - firewall
+
+- name: open tcp/udp firewall holes for gateway
+  ufw:
+    rule: allow
+    port: 8999
+    proto: tcp
+  tags:
+    - firewall
