@@ -6,6 +6,10 @@ upstream nextcloud {
     server 127.0.0.1:8888;
 }
 
+upstream archmirror {
+	server 127.0.0.1:8080;
+}
+
 upstream alexjorgef {
 	server 192.168.1.212:80;
 }
@@ -63,6 +67,37 @@ server {
     location /grafana/ {
         access_log   /var/log/nginx/{{ server_http_domain }}/access.log main;
         proxy_pass http://grafana;
+        proxy_set_header Host                 $http_host;
+        proxy_set_header X-Real-IP            $remote_addr;
+        proxy_set_header X-Forwarded-For      $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto    "https";
+    }
+
+    location / {
+        add_header Content-Type text/plain;
+        return 200 "Nothing to see here.";
+    }
+}
+
+server {
+    listen       443 ssl http2;
+    listen       [::]:443 ssl http2;
+    server_name  {{ server_archmirror_domain }};
+
+    access_log   /var/log/nginx/{{ server_archmirror_domain }}/access.log reduced;
+    error_log    /var/log/nginx/{{ server_archmirror_domain }}/error.log;
+
+    ssl_certificate      /etc/letsencrypt/live/{{ server_archmirror_domain }}/fullchain.pem;
+    ssl_certificate_key  /etc/letsencrypt/live/{{ server_archmirror_domain }}/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/{{ server_archmirror_domain }}/chain.pem;
+
+    root /srv/http;
+
+    index index.html index.htm index.php;
+
+    location /mirror/ {
+        access_log   /var/log/nginx/{{ server_archmirror_domain }}/access.log main;
+        proxy_pass http://archmirror/;
         proxy_set_header Host                 $http_host;
         proxy_set_header X-Real-IP            $remote_addr;
         proxy_set_header X-Forwarded-For      $proxy_add_x_forwarded_for;

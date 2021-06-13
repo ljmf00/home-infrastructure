@@ -17,6 +17,7 @@
     - '{{ server_http_domain }}'
     - '{{ nextcloud_http_domain }}'
     - '{{ server_root_domain }}'
+    - '{{ server_archmirror_domain }}'
     - 'alexjorgef.com'
 
 - name: snippets directories
@@ -92,3 +93,7 @@
 - name: create ssl cert for nextcloud domain
   command: certbot certonly --email webmaster@lsferreira.net --agree-tos --rsa-key-size 4096 --renew-by-default --webroot -w {{ letsencrypt_validation_dir }} -d '{{ nextcloud_http_domain }}' creates='/etc/letsencrypt/live/{{ nextcloud_http_domain }}/fullchain.pem'
   when: 'nextcloud_http_domain is defined'
+
+- name: create ssl cert for archmirror domain
+  command: certbot certonly --email webmaster@lsferreira.net --agree-tos --rsa-key-size 4096 --renew-by-default --webroot -w {{ letsencrypt_validation_dir }} -d '{{ server_archmirror_domain }}' creates='/etc/letsencrypt/live/{{ server_archmirror_domain }}/fullchain.pem'
+  when: 'server_archmirror_domain is defined'

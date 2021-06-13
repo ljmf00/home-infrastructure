@@ -1,4 +1,5 @@
 ---
 
 server_http_domain: luna.lsferreira.net
+server_archmirror_domain: arch.lsferreira.net
 server_root_domain: lsferreira.net
