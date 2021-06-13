@@ -17,6 +17,7 @@
     - '{{ server_http_domain }}'
     - '{{ nextcloud_http_domain }}'
     - '{{ server_root_domain }}'
+    - 'alexjorgef.com'
 
 - name: snippets directories
   file: state=directory path=/etc/nginx/{{ item }} owner=root group=root mode=0755

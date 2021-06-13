@@ -6,6 +6,14 @@ upstream nextcloud {
     server 127.0.0.1:8888;
 }
 
+upstream alexjorgef {
+	server 192.168.1.212:80;
+}
+
+upstream ssl-alexjorgef {
+	server 192.168.1.212:443;
+}
+
 server {
     listen       80;
     listen       [::]:80;
@@ -19,6 +27,20 @@ server {
     location / {
         access_log off;
         return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen       80;
+    listen       [::]:80;
+    server_name  *.alexjorgef.com;
+
+    access_log   /var/log/nginx/alexjorgef.com/access.log reduced;
+    error_log    /var/log/nginx/alexjorgef.com/error.log;
+
+    location / {
+        access_log off;
+        proxy_pass http://alexjorgef;
     }
 }
 
