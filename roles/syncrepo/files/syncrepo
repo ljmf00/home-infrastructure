@@ -92,6 +92,15 @@ rsync_cmd "${source_url}" "${target}"
 #	--exclude='/other' \
 #	--exclude='/sources' \
 #	--exclude='/iso' \
-#
+
+if hash ipfs 2>/dev/null; then
+	export IPFS_PATH=/mnt/IPFSRepo/
+	IPFSPINOBJECT="$(ipfs add -r --raw-leaves --nocopy --fscache /mnt/ArchlinuxMirror -Q)"
+	if ipfs pin ls "$(cat /mnt/IPFSArchlinuxMirror)" -q | grep "$(cat /mnt/IPFSArchlinuxMirror)"; then
+		ipfs pin rm -r "$(cat /mnt/IPFSArchlinuxMirror)"
+	fi
+
+	echo "$IPFSPINOBJECT" > /mnt/IPFSArchlinuxMirror
+fi
 
 echo "Last sync was $(date -d @$(cat ${target}/lastsync))"
