@@ -1,4 +1,4 @@
 ---
 
 lighttpd_port: '8080'
-lighttpd_path: /srv/syncrepo/
+lighttpd_path: /mnt/ArchlinuxMirror/

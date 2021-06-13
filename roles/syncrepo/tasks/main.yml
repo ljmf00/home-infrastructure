@@ -32,7 +32,7 @@
     dest: /etc/pacman.conf
     insertafter: '^#CacheDir'
     regexp: '^CacheDir'
-    line: 'CacheDir     = /var/cache/pacman/pkg/ /srv/syncrepo/pool/packages/ /srv/syncrepo/pool/community/'
+    line: 'CacheDir     = /var/cache/pacman/pkg/ /mnt/ArchlinuxMirror/pool/packages/ /mnt/ArchlinuxMirror/pool/community/'
 
 - name: open tcp firewall holes
   ufw:
