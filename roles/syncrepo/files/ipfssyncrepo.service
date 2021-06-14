@@ -1,0 +1,9 @@
+[Unit]
+Description=Synchronize package repository mirror to IPFS
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/ipfssyncrepo
+Nice=19
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7

@@ -8,13 +8,18 @@
   pacman: name=rsync state=present
 
 - name: install syncrepo script
-  copy: src=syncrepo dest=/usr/local/bin/syncrepo owner=root group=root mode=0755
+  copy: src={{ item }} dest=/usr/local/bin/{{ item }} owner=root group=root mode=0755
+  with_items:
+    - syncrepo
+    - ipfssyncrepo
 
 - name: install syncrepo units
   copy: src={{ item }} dest=/etc/systemd/system/{{ item }} owner=root group=root mode=0644
   with_items:
     - syncrepo.timer
     - syncrepo.service
+    - ipfssyncrepo.timer
+    - ipfssyncrepo.service
   notify:
     - daemon reload
 
@@ -25,6 +30,7 @@
   service: name={{ item }} enabled=yes state=started
   with_items:
     - syncrepo.timer
+    - ipfssyncrepo.timer
     - rsyncd.socket
 
 - name: set local mirror as cachedir

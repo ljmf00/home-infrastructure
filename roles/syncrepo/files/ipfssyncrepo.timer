@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily IPFS repository sync
+
+[Timer]
+OnCalendar=daily
+AccuracySec=1m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

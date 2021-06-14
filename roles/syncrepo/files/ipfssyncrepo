@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Lockfile path
+lock="/var/lock/syncrepo.lck"
+
+exec 9>"${lock}"
+flock -n 9 || exit
+
+if hash ipfs 2>/dev/null; then
+	echo "IPFS is starting adding archlinux mirror..."
+	export IPFS_PATH=/mnt/IPFSRepo/
+	IPFSPINOBJECT="$(ipfs add -r --raw-leaves --nocopy --fscache /mnt/ArchlinuxMirror -Q)"
+	if ipfs pin ls "$(cat /mnt/IPFSArchlinuxMirror)" -q | grep "$(cat /mnt/IPFSArchlinuxMirror)"; then
+		ipfs pin rm -r "$(cat /mnt/IPFSArchlinuxMirror)"
+	fi
+
+	echo "$IPFSPINOBJECT" > /mnt/IPFSArchlinuxMirror
+	ipfs name publish --key=ipfssyncrepo "$IPFSPINOBJECT"
+	echo "IPFS added archlinux mirror."
+fi
