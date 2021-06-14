@@ -3,8 +3,8 @@ Server = https://arch.lsferreira.net/$repo/os/$arch
 
 # HTTP(S)
 Server = https://glua.ua.pt/pub/archlinux/$repo/os/$arch
-Server = http://glua.ua.pt/pub/archlinux/$repo/os/$arch
 Server = https://ftp.rnl.tecnico.ulisboa.pt/pub/archlinux/$repo/os/$arch
+Server = http://glua.ua.pt/pub/archlinux/$repo/os/$arch
 Server = http://ftp.rnl.tecnico.ulisboa.pt/pub/archlinux/$repo/os/$arch
 
 # Local Homeserver
