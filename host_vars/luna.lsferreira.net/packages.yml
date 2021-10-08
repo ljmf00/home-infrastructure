@@ -1,0 +1,8 @@
+---
+
+install_host_packages:
+  official:
+    - minikube
+    - kubectl
+    - docker
+  aur:
